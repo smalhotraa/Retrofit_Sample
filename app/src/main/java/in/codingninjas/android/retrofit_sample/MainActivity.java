@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    String key = "63c643047f96b93c103905a07a6a0992";
+    String key = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
