@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -12,41 +14,81 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    String key = "63c643047f96b93c103905a07a6a0992";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-//        POST retrofit hit
+        // The Movie db check
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com")
+                .baseUrl("https://api.themoviedb.org/3/movie/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         CoursesApi coursesApi = retrofit.create(CoursesApi.class);
 
-        final Post post = new Post("abcd","lk",1);
+        Call<MovieResponse> call = coursesApi.getMovies("popular",key);
 
-        Call<Post> call = coursesApi.createPost(post);
-
-        call.enqueue(new Callback<Post>() {
+        call.enqueue(new Callback<MovieResponse>() {
             @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                MovieResponse movieResponse = response.body();
 
-                Post post1 = response.body();
+                if(movieResponse != null){
 
-                Log.d("lalala",post1.title);
-                Log.d("lalala",post1.body);
-                Log.d("lalala",post1.userId + " ");
+                    ArrayList<Movie> movies = movieResponse.results;
+
+                    for(Movie movie : movies){
+
+                        Log.d("lalala"," id = " + movie.id);
+                    }
+
+                }
             }
 
             @Override
-            public void onFailure(Call<Post> call, Throwable t) {
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+
                 Log.d("lalala",t.getMessage());
             }
         });
+
+
+
+
+
+//        POST retrofit hit
+
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://jsonplaceholder.typicode.com")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        CoursesApi coursesApi = retrofit.create(CoursesApi.class);
+//
+//        final Post post = new Post("abcd","lk",1);
+//
+//        Call<Post> call = coursesApi.createPost(post);
+//
+//        call.enqueue(new Callback<Post>() {
+//            @Override
+//            public void onResponse(Call<Post> call, Response<Post> response) {
+//
+//                Post post1 = response.body();
+//
+//                Log.d("lalala",post1.title);
+//                Log.d("lalala",post1.body);
+//                Log.d("lalala",post1.userId + " ");
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Post> call, Throwable t) {
+//                Log.d("lalala",t.getMessage());
+//            }
+//        });
 
 //      Query retrofit hit
 

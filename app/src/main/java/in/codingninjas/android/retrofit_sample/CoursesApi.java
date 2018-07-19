@@ -26,4 +26,7 @@ public interface CoursesApi {
 
     @POST("/posts")
     Call<Post> createPost(@Body Post post);
+
+    @GET("{type}")
+    Call<MovieResponse> getMovies(@Path("type") String name,@Query("api_key")String key);
 }
